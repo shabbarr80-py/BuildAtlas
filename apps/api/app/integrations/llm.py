@@ -11,12 +11,18 @@ class LLMProvider(Protocol):
     def analyze(self, idea: str, repositories: list[dict]) -> dict: ...
 
 
+class AlternativeItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: str
+    tradeoff: str
+
+
 class StackItem(BaseModel):
     model_config = ConfigDict(extra="forbid")
     category: str
     name: str
     rationale: str
-    alternatives: list[str]
+    alternatives: list[AlternativeItem]
     is_estimate: bool
 
 
@@ -53,7 +59,7 @@ class MockLLMProvider:
             "functional_requirements": ["Users can create and manage their core records", "Users can search and review relevant results", "Users can export their data"],
             "non_functional_requirements": ["Protect user data with authentication", "Provide responsive accessible interfaces", "Record observable errors and activity"],
             "assumptions": ["Initial release targets a web application", "Workload and scale are not yet quantified"],
-            "stack": [{"category": "API", "name": "FastAPI", "rationale": "Typed Python API with clear request validation.", "alternatives": ["Django REST Framework", "NestJS"], "is_estimate": True}],
+            "stack": [{"category": "API", "name": "FastAPI", "rationale": "Typed Python API with clear request validation.", "alternatives": [{"name": "Django REST Framework", "tradeoff": "Includes more built-in conventions and admin features, with a heavier framework footprint."}, {"name": "NestJS", "tradeoff": "Keeps a TypeScript stack end to end, but requires a Node.js backend team."}], "is_estimate": True}],
             "architecture": "flowchart LR\n  UI[Web client] --> API[Application API]\n  API --> DB[(PostgreSQL)]\n  API --> EXT[External integrations]",
             "risks": [{"title": "Unclear requirements", "severity": "medium", "mitigation": "Validate assumptions with users before implementation."}],
             "roadmap": [{"title": "Foundation", "tasks": ["Confirm core user journeys", "Set up project and deployment skeleton"]}, {"title": "Core release", "tasks": ["Implement primary workflows", "Add validation and automated checks"]}, {"title": "Launch readiness", "tasks": ["Review security and accessibility", "Monitor a staged release"]}],

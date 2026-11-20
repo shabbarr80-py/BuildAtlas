@@ -9,7 +9,7 @@ type StackItem = {
   category: string;
   name: string;
   rationale: string;
-  alternatives: string[];
+  alternatives: Array<string | { name: string; tradeoff: string }>;
   is_estimate: boolean;
 };
 type Risk = { title: string; severity: string; mitigation: string };
@@ -273,9 +273,23 @@ export default function AnalysisPage({
                       {item.category}: {item.name}
                     </h3>
                     <p className="mt-2 text-sm text-muted">{item.rationale}</p>
-                    <p className="mt-3 text-xs text-muted">
-                      Alternatives: {item.alternatives.join(", ")}
-                    </p>
+                    <div className="mt-3 space-y-1 text-xs text-muted">
+                      <p>Alternatives and trade-offs</p>
+                      {item.alternatives.map((alternative) => (
+                        <p
+                          key={
+                            typeof alternative === "string"
+                              ? alternative
+                              : alternative.name
+                          }
+                        >
+                          -{" "}
+                          {typeof alternative === "string"
+                            ? alternative
+                            : `${alternative.name}: ${alternative.tradeoff}`}
+                        </p>
+                      ))}
+                    </div>
                   </article>
                 ))}
               </div>
@@ -341,6 +355,7 @@ export default function AnalysisPage({
             )}
             {tab === "Roadmap" && (
               <div className="space-y-5">
+                <Badge>AI-generated roadmap</Badge>
                 {blueprint.roadmap.map((milestone, index) => (
                   <article
                     key={`${milestone.title}-${index}`}
