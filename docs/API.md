@@ -16,3 +16,5 @@ All application routes are under `/api/v1`. Send `Authorization: Bearer <token>`
 | GET | `/analyses/{id}/export?format=md\|json` | Export completed analysis |
 
 Every resource lookup checks the owning user. OpenAPI docs are at `/docs`.
+
+The validated blueprint JSON schema is defined by `BlueprintOutput` in `app/integrations/llm.py`. It contains a summary, functional and non-functional requirement lists, assumptions, stack choices (with alternatives and trade-offs), Mermaid architecture text, risks, roadmap milestones/tasks, and confidence. Both provider output and saved analyses are validated against this schema. JSON exports include the blueprint and source records with retrieval timestamps; Markdown exports include a Sources section with the same links and times.

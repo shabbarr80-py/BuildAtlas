@@ -20,7 +20,12 @@ Known follow-up: move background work and rate-limit state to shared durable inf
 ## Phase 3: QA
 
 - [x] 1. Docker and infrastructure configuration review, Docker build-context ignores, and Compose YAML parse passed; Docker startup, Postgres migration rollback, restart and volume checks UNVERIFIED (Docker CLI/Compose unavailable)
-- [ ] 2. Backend and database hardening, PostgreSQL test support, authorization and coverage
+- [x] 2. Backend and database hardening: `TEST_DATABASE_URL` (defaults to an isolated SQLite database), repeatable schema fixture, UUID/JSON/JSONB portability, status constraints, indexes and uniqueness asserted; 17 API tests pass with 93% coverage; GitHub timeout/rate-limit, ownership, archive, task edit and status tests pass; Markdown/JSON exports now include source URL/timestamp. Alembic SQLite upgrade/downgrade passed. PostgreSQL execution UNVERIFIED per Docker-unavailable rule.
+  - [x] `TEST_DATABASE_URL` and repeatable isolated test database fixture
+  - [x] Constraints/indexes and DB portability assertions
+  - [x] Cross-user resource coverage, archive semantics, analysis/roadmap/export, and HTTP status coverage
+  - [x] GitHub failure cases and evidence export assertions
+  - [x] Coverage report (93%)
 - [ ] 3. Frontend flow, states, accessibility checks, and Playwright smoke CI
 - [ ] 4. Pipeline schema, provider failures, source evidence, and injection-resistance tests
 - [ ] 5. Cookie sessions, CSRF, ownership, request limits, Mermaid handling, and dependency audits

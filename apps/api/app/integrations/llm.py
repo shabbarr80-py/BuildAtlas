@@ -56,13 +56,63 @@ class MockLLMProvider:
     def analyze(self, idea: str, repositories: list[dict]) -> dict:
         return {
             "summary": f"A build plan for: {idea[:300]}",
-            "functional_requirements": ["Users can create and manage their core records", "Users can search and review relevant results", "Users can export their data"],
-            "non_functional_requirements": ["Protect user data with authentication", "Provide responsive accessible interfaces", "Record observable errors and activity"],
-            "assumptions": ["Initial release targets a web application", "Workload and scale are not yet quantified"],
-            "stack": [{"category": "API", "name": "FastAPI", "rationale": "Typed Python API with clear request validation.", "alternatives": [{"name": "Django REST Framework", "tradeoff": "Includes more built-in conventions and admin features, with a heavier framework footprint."}, {"name": "NestJS", "tradeoff": "Keeps a TypeScript stack end to end, but requires a Node.js backend team."}], "is_estimate": True}],
+            "functional_requirements": [
+                "Users can create and manage their core records",
+                "Users can search and review relevant results",
+                "Users can export their data",
+            ],
+            "non_functional_requirements": [
+                "Protect user data with authentication",
+                "Provide responsive accessible interfaces",
+                "Record observable errors and activity",
+            ],
+            "assumptions": [
+                "Initial release targets a web application",
+                "Workload and scale are not yet quantified",
+            ],
+            "stack": [
+                {
+                    "category": "API",
+                    "name": "FastAPI",
+                    "rationale": "Typed Python API with clear request validation.",
+                    "alternatives": [
+                        {
+                            "name": "Django REST Framework",
+                            "tradeoff": "Includes more built-in conventions and admin features, with a heavier framework footprint.",
+                        },
+                        {
+                            "name": "NestJS",
+                            "tradeoff": "Keeps a TypeScript stack end to end, but requires a Node.js backend team.",
+                        },
+                    ],
+                    "is_estimate": True,
+                }
+            ],
             "architecture": "flowchart LR\n  UI[Web client] --> API[Application API]\n  API --> DB[(PostgreSQL)]\n  API --> EXT[External integrations]",
-            "risks": [{"title": "Unclear requirements", "severity": "medium", "mitigation": "Validate assumptions with users before implementation."}],
-            "roadmap": [{"title": "Foundation", "tasks": ["Confirm core user journeys", "Set up project and deployment skeleton"]}, {"title": "Core release", "tasks": ["Implement primary workflows", "Add validation and automated checks"]}, {"title": "Launch readiness", "tasks": ["Review security and accessibility", "Monitor a staged release"]}],
+            "risks": [
+                {
+                    "title": "Unclear requirements",
+                    "severity": "medium",
+                    "mitigation": "Validate assumptions with users before implementation.",
+                }
+            ],
+            "roadmap": [
+                {
+                    "title": "Foundation",
+                    "tasks": [
+                        "Confirm core user journeys",
+                        "Set up project and deployment skeleton",
+                    ],
+                },
+                {
+                    "title": "Core release",
+                    "tasks": ["Implement primary workflows", "Add validation and automated checks"],
+                },
+                {
+                    "title": "Launch readiness",
+                    "tasks": ["Review security and accessibility", "Monitor a staged release"],
+                },
+            ],
             "confidence": "low",
         }
 
@@ -79,7 +129,11 @@ class OpenAICompatibleProvider:
                     "model": settings.llm_model,
                     "response_format": {
                         "type": "json_schema",
-                        "json_schema": {"name": "buildatlas_blueprint", "strict": True, "schema": BlueprintOutput.model_json_schema()},
+                        "json_schema": {
+                            "name": "buildatlas_blueprint",
+                            "strict": True,
+                            "schema": BlueprintOutput.model_json_schema(),
+                        },
                     },
                     "messages": [{"role": "user", "content": prompt}],
                 },

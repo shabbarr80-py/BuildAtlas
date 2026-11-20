@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file="../../.env", extra="ignore")
     database_url: str = "sqlite:///./buildatlas.db"
+    test_database_url: str | None = None
     jwt_secret: str = "local-development-secret-change-this"
     github_token: str | None = None
     llm_api_key: str | None = None
@@ -13,3 +14,7 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def effective_database_url() -> str:
+    return settings.test_database_url or settings.database_url

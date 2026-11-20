@@ -35,19 +35,68 @@ def run_analysis(analysis_id):
             # GitHub is optional evidence; the run can proceed with no repository results.
             repositories = []
         result = get_provider().analyze(project.description, repositories)
-        required = {"summary", "functional_requirements", "non_functional_requirements", "assumptions", "stack", "architecture", "risks", "roadmap"}
+        required = {
+            "summary",
+            "functional_requirements",
+            "non_functional_requirements",
+            "assumptions",
+            "stack",
+            "architecture",
+            "risks",
+            "roadmap",
+        }
         if not isinstance(result, dict) or not required.issubset(result):
             raise ValueError("Provider returned an incomplete blueprint")
         for repo in repositories:
-            db.add(RepositoryCandidate(analysis_run_id=run.id, **{k: repo[k] for k in ("full_name", "html_url", "language", "stars", "license", "description")}, pushed_at=datetime.fromisoformat(repo["pushed_at"].replace("Z", "+00:00")) if repo.get("pushed_at") else None))
-            db.add(ResearchSource(analysis_run_id=run.id, source_type="github_repository", url=repo["html_url"], title=repo["full_name"]))
+            db.add(
+                RepositoryCandidate(
+                    analysis_run_id=run.id,
+                    **{
+                        k: repo[k]
+                        for k in (
+                            "full_name",
+                            "html_url",
+                            "language",
+                            "stars",
+                            "license",
+                            "description",
+                        )
+                    },
+                    pushed_at=datetime.fromisoformat(repo["pushed_at"].replace("Z", "+00:00"))
+                    if repo.get("pushed_at")
+                    else None,
+                )
+            )
+            db.add(
+                ResearchSource(
+                    analysis_run_id=run.id,
+                    source_type="github_repository",
+                    url=repo["html_url"],
+                    title=repo["full_name"],
+                )
+            )
         for item in result["stack"]:
-            db.add(Recommendation(analysis_run_id=run.id, category=item.get("category", "stack"), name=item["name"], rationale=item["rationale"], alternatives=item.get("alternatives", []), is_estimate=item.get("is_estimate", True)))
+            db.add(
+                Recommendation(
+                    analysis_run_id=run.id,
+                    category=item.get("category", "stack"),
+                    name=item["name"],
+                    rationale=item["rationale"],
+                    alternatives=item.get("alternatives", []),
+                    is_estimate=item.get("is_estimate", True),
+                )
+            )
         # Keep prior successful milestones intact; each analysis gets its own roadmap rows.
-        max_position = db.scalar(select(func.max(RoadmapMilestone.position)).where(RoadmapMilestone.project_id == project.id))
+        max_position = db.scalar(
+            select(func.max(RoadmapMilestone.position)).where(
+                RoadmapMilestone.project_id == project.id
+            )
+        )
         base_position = max_position + 1 if max_position is not None else 0
         for pos, milestone in enumerate(result["roadmap"]):
-            row = RoadmapMilestone(project_id=project.id, title=milestone["title"], position=base_position + pos)
+            row = RoadmapMilestone(
+                project_id=project.id, title=milestone["title"], position=base_position + pos
+            )
             db.add(row)
             db.flush()
             for title in milestone.get("tasks", []):

@@ -26,7 +26,7 @@ See `.env.example` for database, JWT, GitHub, LLM, CORS, and frontend API settin
 
 ## Checks
 
-API: `ruff check . && pytest` from `apps/api`. Web: `npm run typecheck && npm run build` from `apps/web`.
+API: `ruff check . && pytest --cov=app --cov-report=term` from `apps/api`. Set `TEST_DATABASE_URL` to run against an isolated PostgreSQL test database; when unset, tests use SQLite regardless of the runtime `DATABASE_URL`. Web: `npm run lint && npm run typecheck && npm run build` from `apps/web`.
 
 ## Limitations
 

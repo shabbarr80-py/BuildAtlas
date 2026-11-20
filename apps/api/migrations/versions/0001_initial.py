@@ -1,4 +1,5 @@
 """Initial BuildAtlas schema."""
+
 from alembic import op
 
 from app.core.database import Base

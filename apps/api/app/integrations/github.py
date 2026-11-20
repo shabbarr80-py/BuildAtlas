@@ -31,11 +31,27 @@ class RestGitHubClient:
         params = {"q": query, "per_page": 30, "page": 1}
         for _ in range(2):
             response = httpx.get(url, params=params, headers=headers, timeout=15)
-            if response.status_code in (403, 429) and response.headers.get("X-RateLimit-Remaining") == "0":
-                raise httpx.HTTPStatusError("GitHub API rate limit reached", request=response.request, response=response)
+            if (
+                response.status_code in (403, 429)
+                and response.headers.get("X-RateLimit-Remaining") == "0"
+            ):
+                raise httpx.HTTPStatusError(
+                    "GitHub API rate limit reached", request=response.request, response=response
+                )
             response.raise_for_status()
             for item in response.json().get("items", []):
-                output.append({"full_name": item["full_name"], "html_url": item["html_url"], "language": item.get("language"), "stars": item["stargazers_count"], "license": (item.get("license") or {}).get("spdx_id"), "description": item.get("description"), "pushed_at": item.get("pushed_at"), "retrieved_at": now})
+                output.append(
+                    {
+                        "full_name": item["full_name"],
+                        "html_url": item["html_url"],
+                        "language": item.get("language"),
+                        "stars": item["stargazers_count"],
+                        "license": (item.get("license") or {}).get("spdx_id"),
+                        "description": item.get("description"),
+                        "pushed_at": item.get("pushed_at"),
+                        "retrieved_at": now,
+                    }
+                )
             next_link = response.links.get("next", {}).get("url")
             if not next_link:
                 break
