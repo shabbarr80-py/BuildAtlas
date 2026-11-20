@@ -13,6 +13,16 @@ def test_mock_provider_is_deterministic():
     assert "architecture" in result
 
 
+def test_blueprint_schema_rejects_missing_sections():
+    import pytest
+    from pydantic import ValidationError
+
+    from app.integrations.llm import BlueprintOutput
+
+    with pytest.raises(ValidationError):
+        BlueprintOutput.model_validate({"summary": "Incomplete"})
+
+
 def test_llm_provider_retries_invalid_json(monkeypatch):
     from app.core.config import settings
     from app.integrations.llm import OpenAICompatibleProvider
