@@ -16,3 +16,14 @@
 - [ ] Compose startup (Docker unavailable in authoring environment)
 
 Known follow-up: move background work and rate-limit state to shared durable infrastructure before running multiple API replicas.
+
+## Phase 3: QA
+
+- [x] 1. Docker and infrastructure configuration review, Docker build-context ignores, and Compose YAML parse passed; Docker startup, Postgres migration rollback, restart and volume checks UNVERIFIED (Docker CLI/Compose unavailable)
+- [ ] 2. Backend and database hardening, PostgreSQL test support, authorization and coverage
+- [ ] 3. Frontend flow, states, accessibility checks, and Playwright smoke CI
+- [ ] 4. Pipeline schema, provider failures, source evidence, and injection-resistance tests
+- [ ] 5. Cookie sessions, CSRF, ownership, request limits, Mermaid handling, and dependency audits
+- [ ] 6. Restart recovery, analysis timeout, structured logs, request IDs, liveness/readiness
+- [ ] 7. Production images, CI services, repository hygiene, backups, deployment and env docs
+- [ ] 8. Final verification, coverage, unverified checks, and production verdict
