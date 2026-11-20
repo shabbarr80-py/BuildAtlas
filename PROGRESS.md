@@ -9,7 +9,7 @@
 
 ## Verification
 
-- [x] API pytest (7 passed) and Ruff
+- [x] API pytest (10 passed) and Ruff
 - [x] Frontend type-check and production build
 - [x] Alembic initial migration on SQLite
 - [x] Production dependency audit (0 vulnerabilities)
