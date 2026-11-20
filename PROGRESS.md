@@ -10,7 +10,7 @@
 ## Verification
 
 - [x] API pytest (10 passed) and Ruff
-- [x] Frontend type-check and production build
+- [x] Frontend ESLint, type-check, and production build
 - [x] Alembic initial migration on SQLite
 - [x] Production dependency audit (0 vulnerabilities)
 - [ ] Compose startup (Docker unavailable in authoring environment)
