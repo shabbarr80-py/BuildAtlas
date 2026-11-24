@@ -88,7 +88,7 @@ class MockLLMProvider:
                     "is_estimate": True,
                 }
             ],
-            "architecture": "flowchart LR\n  UI[Web client] --> API[Application API]\n  API --> DB[(PostgreSQL)]\n  API --> EXT[External integrations]",
+            "architecture": "flowchart LR\n  UI[Web client] --> API[Application API]\n  API --> DB[(PostgreSQL database)]\n  API --> Auth[(Authentication & sessions)]",
             "risks": [
                 {
                     "title": "Unclear requirements",
